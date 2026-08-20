@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Trình tạo hóa đơn</title>
+    <title>Tạo hóa đơn</title>
     <style>
       * {
         box-sizing: border-box;
@@ -144,9 +144,13 @@
         <div class="panel">
           <h2>Nhập thông tin</h2>
           <label>Rechnungsnummer</label
-          ><input id="invoiceNo" value="RE-2026-0702" /><label
-            >Rechnungsdatum</label
-          ><input id="invoiceDate" value="13.08.2026" /><label>Pos.</label
+          ><input id="invoiceNo" value="" /><label for="invoiceDate">Rechnungsdatum</label>
+<input
+    id="invoiceDate"
+    type="date"
+    value="2026-08-13"
+    onchange="updateInvoiceDate()"
+><label>Pos.</label
           ><input id="pos" value="1" /><label>Beschreibung</label
           ><input
             id="description"
@@ -154,13 +158,13 @@
           /><label>Anzahl</label><input id="count" value="418" />
           <div class="two">
             <div>
-              <label>Netto</label><input id="netto" value="3744,18 €" />
+              <label>Netto</label><input id="netto" value=",00 €" />
             </div>
-            <div><label>7% USt.</label><input id="vat" value="281,82 €" /></div>
+            <div><label>7% USt.</label><input id="vat" value=",00 €" /></div>
           </div>
-          <label>Brutto</label><input id="brutto" value="4026,00 €" /><label
+          <label>Brutto</label><input id="brutto" value=",00 €" /><label
             >Gesamtbetrag</label
-          ><input id="total" value="4026,00 €" /><button onclick="print()">
+          ><input id="total" value=",00 €" /><button onclick="print()">
             In / Lưu PDF
           </button>
         </div>
@@ -211,6 +215,17 @@
       </div>
     </div>
     <script>
+      function updateInvoiceDate() {
+    const date = document.getElementById("invoiceDate").value;
+
+    if (date) {
+        const parts = date.split("-");
+        const formattedDate =
+            parts[2] + "." + parts[1] + "." + parts[0];
+
+        document.getElementById("pInvoiceDate").textContent = formattedDate;
+    }
+}
       const m = {
         invoiceNo: "pInvoiceNo",
         invoiceDate: "pInvoiceDate",
