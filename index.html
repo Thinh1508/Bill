@@ -144,18 +144,19 @@
         <div class="panel">
           <h2>Nhập thông tin</h2>
           <label>Rechnungsnummer</label
-          ><input id="invoiceNo" value="" /><label for="invoiceDate">Rechnungsdatum</label>
-<input
-    id="invoiceDate"
-    type="date"
-    value="2026-08-13"
-    onchange="updateInvoiceDate()"
-><label>Pos.</label
+          ><input id="invoiceNo" value="RE-2026-" />
+          <label for="invoiceDate">Rechnungsdatum</label>
+          <input
+              id="invoiceDate"
+              type="date"
+              value="2026-08-13"
+              onchange="updateInvoiceDate()"
+          ><label>Pos.</label
           ><input id="pos" value="1" /><label>Beschreibung</label
           ><input
             id="description"
-            value="418 Mitarbeiteressen – Juni 2026"
-          /><label>Anzahl</label><input id="count" value="418" />
+            value=""
+          /><label>Anzahl</label><input id="count" value="0" />
           <div class="two">
             <div>
               <label>Netto</label><input id="netto" value=",00 €" />
@@ -179,8 +180,8 @@
           </div>
           <div class="title">RECHNUNG</div>
           <div class="meta">
-            Rechnungsnummer: <span id="pInvoiceNo">RE-2026-0702</span
-            ><br />Rechnungsdatum: <span id="pInvoiceDate">13.08.2026</span>
+            Rechnungsnummer: <span id="pInvoiceNo">RE-2026-</span
+            ><br />Rechnungsdatum: <span id="pInvoiceDate"></span>
           </div>
           <table>
             <thead>
@@ -197,15 +198,15 @@
               <tr>
                 <td id="pPos">1</td>
                 <td id="pDescription">418 Mitarbeiteressen – Juni 2026</td>
-                <td id="pCount">418</td>
-                <td id="pNetto">3744,18 €</td>
-                <td id="pVat">281,82 €</td>
-                <td id="pBrutto">4026,00 €</td>
+                <td id="pCount">0</td>
+                <td id="pNetto">0,00 €</td>
+                <td id="pVat">0,00 €</td>
+                <td id="pBrutto">0,00 €</td>
               </tr>
             </tbody>
           </table>
           <div class="total">
-            Gesamtbetrag: <span id="pTotal">4026,00 €</span>
+            Gesamtbetrag: <span id="pTotal">0,00 €</span>
           </div>
           <div class="bank">
             Bankverbindung<br />Thanh Tung Nguyen<br />IBAN: DE07 7105 0000 0020
