@@ -149,13 +149,13 @@
           <input
               id="invoiceDate"
               type="date"
-              value="2026-08-13"
+              value="<?= date('Y-m-d') ?>"
               onchange="updateInvoiceDate()"
           ><label>Pos.</label
           ><input id="pos" value="1" /><label>Beschreibung</label
           ><input
             id="description"
-            value=""
+            value="Name Beschreibung  – Monat 2026"
           /><label>Anzahl</label><input id="count" value="0" />
           <div class="two">
             <div>
@@ -197,7 +197,7 @@
             <tbody>
               <tr>
                 <td id="pPos">1</td>
-                <td id="pDescription">418 Mitarbeiteressen – Juni 2026</td>
+                <td id="pDescription">Name Beschreibung  – Monat 2026</td>
                 <td id="pCount">0</td>
                 <td id="pNetto">0,00 €</td>
                 <td id="pVat">0,00 €</td>
