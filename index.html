@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Trình tạo hóa đơn</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f2f3f5;
+        font: 14px Arial;
+        color: #222;
+      }
+      .wrap {
+        max-width: 1200px;
+        margin: 25px auto;
+        padding: 0 18px;
+      }
+      h1 {
+        font-size: 25px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 22px;
+      }
+      .panel,
+      .invoice {
+        background: #fff;
+        border-radius: 9px;
+        box-shadow: 0 2px 12px #0001;
+      }
+      .panel {
+        padding: 20px;
+      }
+      .panel h2 {
+        font-size: 18px;
+        margin: 0 0 15px;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin: 12px 0 5px;
+      }
+      input {
+        width: 100%;
+        padding: 9px;
+        border: 1px solid #bbb;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      button {
+        width: 100%;
+        margin-top: 18px;
+        padding: 11px;
+        border: 0;
+        border-radius: 5px;
+        background: #222;
+        color: white;
+        cursor: pointer;
+      }
+      .invoice {
+        padding: 65px;
+        min-height: 800px;
+      }
+      .seller,
+      .recipient {
+        line-height: 1.35;
+        margin-bottom: 40px;
+      }
+      .meta {
+        line-height: 1.4;
+      }
+      .title {
+        font-size: 17px;
+      }
+      table {
+        width: 100%;
+        margin-left: 2.5%;
+        border-collapse: collapse;
+        margin-top: 0;
+      }
+      th,
+      td {
+        border: 1px solid #555;
+        padding: 7px 8px;
+        text-align: left;
+      }
+      th {
+        background: #ddd;
+        font-weight: normal;
+      }
+      .total {
+        margin-top: 32px;
+      }
+      .bank {
+        margin-top: 28px;
+        line-height: 1.4;
+      }
+      @media (max-width: 850px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .invoice {
+          padding: 30px 20px;
+        }
+      }
+      @media print {
+        body {
+          background: #fff;
+        }
+        .panel,
+        h1 {
+          display: none;
+        }
+        .wrap {
+          margin: 0;
+          padding: 0;
+        }
+        .grid {
+          display: block;
+        }
+        .invoice {
+          box-shadow: none;
+          border-radius: 0;
+          padding: 20mm;
+          min-height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Trình tạo hóa đơn</h1>
+      <div class="grid">
+        <div class="panel">
+          <h2>Nhập thông tin</h2>
+          <label>Rechnungsnummer</label
+          ><input id="invoiceNo" value="RE-2026-0702" /><label
+            >Rechnungsdatum</label
+          ><input id="invoiceDate" value="13.08.2026" /><label>Pos.</label
+          ><input id="pos" value="1" /><label>Beschreibung</label
+          ><input
+            id="description"
+            value="418 Mitarbeiteressen – Juni 2026"
+          /><label>Anzahl</label><input id="count" value="418" />
+          <div class="two">
+            <div>
+              <label>Netto</label><input id="netto" value="3744,18 €" />
+            </div>
+            <div><label>7% USt.</label><input id="vat" value="281,82 €" /></div>
+          </div>
+          <label>Brutto</label><input id="brutto" value="4026,00 €" /><label
+            >Tổng cộng</label
+          ><input id="total" value="4026,00 €" /><button onclick="print()">
+            In / Lưu PDF
+          </button>
+        </div>
+        <div class="invoice">
+          <div class="seller">
+            <b>AN ASIA CUISINE &amp; SUSHI</b><br />Landshuter Straße 14<br />85368
+            Moosburg<br />Thanh Tung Nguyen<br />USt-IdNr.: DE93 440 472 134
+          </div>
+          <div class="recipient">
+            Rechnungsempfänger<br />EFAFLEX Tor- und Sicherheitssysteme GmbH
+            &amp; Co. KG<br />Fliederstraße 14<br />84079 Bruckberg
+          </div>
+          <div class="title">RECHNUNG</div>
+          <div class="meta">
+            Rechnungsnummer: <span id="pInvoiceNo">RE-2026-0702</span
+            ><br />Rechnungsdatum: <span id="pInvoiceDate">13.08.2026</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Pos.</th>
+                <th>Beschreibung</th>
+                <th>Anzahl</th>
+                <th>Netto</th>
+                <th>7% USt.</th>
+                <th>Brutto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="pPos">1</td>
+                <td id="pDescription">418 Mitarbeiteressen – Juni 2026</td>
+                <td id="pCount">418</td>
+                <td id="pNetto">3744,18 €</td>
+                <td id="pVat">281,82 €</td>
+                <td id="pBrutto">4026,00 €</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="total">
+            Gesamtbetrag: <span id="pTotal">4026,00 €</span>
+          </div>
+          <div class="bank">
+            Bankverbindung<br />Thanh Tung Nguyen<br />IBAN: DE07 7105 0000 0020
+            7664 65<br />BIC: BYLADEM1BGL
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const m = {
+        invoiceNo: "pInvoiceNo",
+        invoiceDate: "pInvoiceDate",
+        pos: "pPos",
+        description: "pDescription",
+        count: "pCount",
+        netto: "pNetto",
+        vat: "pVat",
+        brutto: "pBrutto",
+        total: "pTotal",
+      }
+      for (const k in m)
+        document.getElementById(k).oninput = () =>
+          (document.getElementById(m[k]).textContent =
+            document.getElementById(k).value)
+    </script>
+  </body>
+</html>
