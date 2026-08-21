@@ -3,49 +3,68 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="format-detection" content="telephone=no, email=no, address=no">
+    <meta
+      name="format-detection"
+      content="telephone=no, email=no, address=no"
+    />
+
     <title>Tạo hóa đơn</title>
+
+    <!-- Thư viện tạo PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
       * {
         box-sizing: border-box;
       }
+
       body {
         margin: 0;
         background: #f2f3f5;
-        font: 14px Arial;
+        font:
+          14px Arial,
+          sans-serif;
         color: #222;
       }
+
       .wrap {
         max-width: 1200px;
         margin: 25px auto;
         padding: 0 18px;
       }
+
       h1 {
         font-size: 25px;
       }
+
       .grid {
         display: grid;
         grid-template-columns: 350px 1fr;
         gap: 22px;
       }
+
       .panel,
       .invoice {
         background: #fff;
         border-radius: 9px;
         box-shadow: 0 2px 12px #0001;
       }
+
       .panel {
         padding: 20px;
       }
+
       .panel h2 {
         font-size: 18px;
         margin: 0 0 15px;
       }
+
       label {
         display: block;
         font-weight: bold;
         margin: 12px 0 5px;
       }
+
       input {
         width: 100%;
         padding: 9px;
@@ -53,82 +72,107 @@
         border-radius: 5px;
         font-size: 14px;
       }
+
       .two {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
       }
+
       button {
         width: 100%;
-        margin-top: 18px;
+        margin-top: 10px;
         padding: 11px;
         border: 0;
         border-radius: 5px;
         background: #222;
         color: white;
         cursor: pointer;
+        font-size: 14px;
       }
+
+      button:hover {
+        background: #444;
+      }
+
       .invoice {
         padding: 65px;
         min-height: 800px;
       }
+
       .seller,
       .recipient {
         line-height: 1.35;
         margin-bottom: 40px;
       }
+
       .meta {
         line-height: 1.4;
       }
+
       .title {
         font-size: 17px;
       }
+
       table {
-        width: 100%;
+        width: 95%;
         margin-left: 2.5%;
         border-collapse: collapse;
         margin-top: 0;
       }
+
       th,
       td {
         border: 1px solid #555;
         padding: 7px 8px;
         text-align: left;
       }
+
       th {
         background: #ddd;
         font-weight: normal;
       }
+
       .total {
         margin-top: 32px;
       }
+
       .bank {
         margin-top: 28px;
         line-height: 1.4;
       }
+
+      /* Điện thoại */
       @media (max-width: 850px) {
         .grid {
           grid-template-columns: 1fr;
         }
+
         .invoice {
           padding: 30px 20px;
         }
       }
+
+      /* Khi in */
       @media print {
         body {
           background: #fff;
         }
+
         .panel,
         h1 {
-          display: none;
+          display: none !important;
         }
+
         .wrap {
           margin: 0;
           padding: 0;
         }
+
         .grid {
           display: block;
         }
+
         .invoice {
           box-shadow: none;
           border-radius: 0;
@@ -138,111 +182,342 @@
       }
     </style>
   </head>
+
   <body>
     <div class="wrap">
       <h1>Trình tạo hóa đơn</h1>
+
       <div class="grid">
+        <!-- ========================= -->
+        <!-- PHẦN NHẬP THÔNG TIN -->
+        <!-- ========================= -->
+
         <div class="panel">
           <h2>Nhập thông tin</h2>
-          <label>Rechnungsnummer</label
-          ><input id="invoiceNo" value="RE-2026-" />
-          <label for="invoiceDate">Rechnungsdatum</label>
-          <input
-              id="invoiceDate"
-              type="date"
-              value="<?= date('Y-m-d') ?>"
-              onchange="updateInvoiceDate()"
-          ><label>Pos.</label
-          ><input id="pos" value="1" /><label>Beschreibung</label
-          ><input
-            id="description"
-            value="Name Beschreibung  – Monat 2026"
-          /><label>Anzahl</label><input id="count" value="0" />
+
+          <label for="invoiceNo"> Rechnungsnummer </label>
+
+          <input id="invoiceNo" value="RE-2026-" />
+
+          <label for="invoiceDate"> Rechnungsdatum </label>
+
+          <input id="invoiceDate" type="date" />
+
+          <label for="pos"> Pos. </label>
+
+          <input id="pos" value="1" />
+
+          <label for="description"> Beschreibung </label>
+
+          <input id="description" value="Name Beschreibung – Monat 2026" />
+
+          <label for="count"> Anzahl </label>
+
+          <input id="count" value="0" />
+
           <div class="two">
             <div>
-              <label>Netto</label><input id="netto" value=",00 €" />
+              <label for="netto">Netto</label>
+              <input id="netto" value="0,00 €" data-placeholder="0,00 €" />
             </div>
-            <div><label>7% USt.</label><input id="vat" value=",00 €" /></div>
+
+            <div>
+              <label for="vat">7% USt.</label>
+              <input id="vat" value="0,00 €" data-placeholder="0,00 €" />
+            </div>
           </div>
-          <label>Brutto</label><input id="brutto" value=",00 €" /><label
-            >Gesamtbetrag</label
-          ><input id="total" value=",00 €" /><button onclick="print()">
-            In / Lưu PDF
-          </button>
+
+          <label for="brutto">Brutto</label>
+          <input id="brutto" value="0,00 €" data-placeholder="0,00 €" />
+
+          <label for="total">Gesamtbetrag</label>
+          <input id="total" value="0,00 €" data-placeholder="0,00 €" />
+
+          <!-- NÚT IN -->
+          <!-- <button type="button" onclick="window.print()">🖨️ In</button> -->
+
+          <!-- NÚT XUẤT PDF -->
+          <button type="button" onclick="xuatPDF()">📄 Xuất PDF</button>
         </div>
-        <div class="invoice">
+
+        <!-- ========================= -->
+        <!-- PHẦN HÓA ĐƠN -->
+        <!-- ========================= -->
+
+        <div class="invoice" id="invoice">
           <div class="seller">
-            AN ASIA CUISINE &amp; SUSHI<br />Landshuter Straße 14<br />85368
-            Moosburg<br />Thanh Tung Nguyen<br />USt-IdNr.: DE93 440 472 134
+            AN ASIA CUISINE &amp; SUSHI<br />
+
+            Landshuter Straße 14<br />
+
+            85368 Moosburg<br />
+
+            Thanh Tung Nguyen<br />
+
+            USt-IdNr.: DE93 440 472 134
           </div>
+
           <div class="recipient">
-            Rechnungsempfänger<br />EFAFLEX Tor- und Sicherheitssysteme GmbH
-            &amp; Co. KG<br />Fliederstraße 14<br />84079 Bruckberg
+            Rechnungsempfänger<br />
+
+            EFAFLEX Tor- und Sicherheitssysteme GmbH &amp; Co. KG<br />
+
+            Fliederstraße 14<br />
+
+            84079 Bruckberg
           </div>
+
           <div class="title">RECHNUNG</div>
+
           <div class="meta">
-            Rechnungsnummer: <span id="pInvoiceNo">RE-2026-</span
-            ><br />Rechnungsdatum: <span id="pInvoiceDate"></span>
+            Rechnungsnummer:
+            <span id="pInvoiceNo"> RE-2026- </span>
+
+            <br />
+
+            Rechnungsdatum:
+            <span id="pInvoiceDate"></span>
           </div>
+
           <table>
             <thead>
               <tr>
                 <th>Pos.</th>
+
                 <th>Beschreibung</th>
+
                 <th>Anzahl</th>
+
                 <th>Netto</th>
+
                 <th>7% USt.</th>
+
                 <th>Brutto</th>
               </tr>
             </thead>
+
             <tbody>
               <tr>
                 <td id="pPos">1</td>
-                <td id="pDescription">Name Beschreibung  – Monat 2026</td>
+
+                <td id="pDescription">Name Beschreibung – Monat 2026</td>
+
                 <td id="pCount">0</td>
+
                 <td id="pNetto">0,00 €</td>
+
                 <td id="pVat">0,00 €</td>
+
                 <td id="pBrutto">0,00 €</td>
               </tr>
             </tbody>
           </table>
+
           <div class="total">
-            Gesamtbetrag: <span id="pTotal">0,00 €</span>
+            Gesamtbetrag:
+            <span id="pTotal"> 0,00 € </span>
           </div>
+
           <div class="bank">
-            Bankverbindung<br />Thanh Tung Nguyen<br />IBAN: DE07 7105 0000 0020
-            7664 65<br />BIC: BYLADEM1BGL
+            Bankverbindung<br />
+
+            Thanh Tung Nguyen<br />
+
+            IBAN: DE07 7105 0000 0020 7664 65<br />
+
+            BIC: BYLADEM1BGL
           </div>
         </div>
       </div>
     </div>
+
     <script>
+      /* ==========================================
+   LẤY NGÀY HÔM NAY
+   ========================================== */
+
+      function getToday() {
+        const today = new Date()
+
+        const year = today.getFullYear()
+
+        const month = String(today.getMonth() + 1).padStart(2, "0")
+
+        const day = String(today.getDate()).padStart(2, "0")
+
+        return `${year}-${month}-${day}`
+      }
+
+      /* ==========================================
+   ĐỊNH DẠNG NGÀY DD.MM.YYYY
+   ========================================== */
+
+      function formatDate(date) {
+        if (!date) {
+          return ""
+        }
+
+        const parts = date.split("-")
+
+        return parts[2] + "." + parts[1] + "." + parts[0]
+      }
+
+      /* ==========================================
+   Ô TIỀN: CLICK VÀO SẼ XÓA SỐ ẢO
+   ========================================== */
+
+      const moneyFields = ["netto", "vat", "brutto", "total"]
+
+      moneyFields.forEach(function (id) {
+        const input = document.getElementById(id)
+
+        input.addEventListener("focus", function () {
+          // Nếu vẫn đang là giá trị mẫu
+          if (this.value === "0,00 €" || this.value === "") {
+            this.value = " €"
+
+            // Đưa con trỏ về trước €
+            this.setSelectionRange(0, 0)
+          }
+        })
+
+        input.addEventListener("blur", function () {
+          // Nếu người dùng không nhập gì
+          if (this.value.trim() === "" || this.value.trim() === "€") {
+            this.value = "0,00 €"
+          }
+        })
+
+        input.addEventListener("input", function () {
+          // Luôn giữ € ở cuối
+          let value = this.value.replace(/€/g, "").trim()
+
+          if (value === "") {
+            this.value = " €"
+            return
+          }
+
+          this.value = value + " €"
+
+          // Đặt con trỏ trước €
+          this.setSelectionRange(this.value.length - 2, this.value.length - 2)
+        })
+      })
+
+      /* ==========================================
+   ANZAHL
+   ========================================== */
+
+      const countInput = document.getElementById("count")
+
+      countInput.addEventListener("focus", function () {
+        if (this.value === "0") {
+          this.value = ""
+        }
+      })
+
+      countInput.addEventListener("blur", function () {
+        if (this.value.trim() === "") {
+          this.value = "0"
+        }
+      })
+
+      /* ==========================================
+   CẬP NHẬT RECHNUNGSDATUM
+   ========================================== */
+
       function updateInvoiceDate() {
-    const date = document.getElementById("invoiceDate").value;
+        const date = document.getElementById("invoiceDate").value
 
-    if (date) {
-        const parts = date.split("-");
-        const formattedDate =
-            parts[2] + "." + parts[1] + "." + parts[0];
+        document.getElementById("pInvoiceDate").textContent = formatDate(date)
+      }
 
-        document.getElementById("pInvoiceDate").textContent = formattedDate;
-    }
-}
-      const m = {
+      /* ==========================================
+   CẬP NHẬT CÁC Ô KHÁC
+   ========================================== */
+
+      const fields = {
         invoiceNo: "pInvoiceNo",
-        invoiceDate: "pInvoiceDate",
+
         pos: "pPos",
+
         description: "pDescription",
+
         count: "pCount",
+
         netto: "pNetto",
+
         vat: "pVat",
+
         brutto: "pBrutto",
+
         total: "pTotal",
       }
-      for (const k in m)
-        document.getElementById(k).oninput = () =>
-          (document.getElementById(m[k]).textContent =
-            document.getElementById(k).value)
+
+      for (const key in fields) {
+        document.getElementById(key).addEventListener("input", function () {
+          document.getElementById(fields[key]).textContent = this.value
+        })
+      }
+
+      /* ==========================================
+   NGÀY MẶC ĐỊNH = HÔM NAY
+   ========================================== */
+
+      document.getElementById("invoiceDate").value = getToday()
+
+      /* Hiển thị ngày ngay khi mở trang */
+
+      updateInvoiceDate()
+
+      /* ==========================================
+   XUẤT PDF
+   ========================================== */
+
+      function xuatPDF() {
+        const invoice = document.getElementById("invoice")
+
+        const invoiceNumber = document
+          .getElementById("invoiceNo")
+          .value.trim()
+          .replace(/[^a-zA-Z0-9_-]/g, "_")
+
+        const fileName = invoiceNumber ? invoiceNumber + ".pdf" : "hoa-don.pdf"
+
+        const options = {
+          margin: 0,
+
+          filename: fileName,
+
+          image: {
+            type: "jpeg",
+            quality: 0.98,
+          },
+
+          html2canvas: {
+            scale: 2,
+
+            useCORS: true,
+
+            backgroundColor: "#ffffff",
+          },
+
+          jsPDF: {
+            unit: "mm",
+
+            format: "a4",
+
+            orientation: "portrait",
+          },
+        }
+
+        html2pdf()
+          .set(options)
+
+          .from(invoice)
+
+          .save()
+      }
     </script>
   </body>
 </html>
